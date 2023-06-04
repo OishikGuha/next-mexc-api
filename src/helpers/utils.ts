@@ -23,43 +23,82 @@ export const buildQueryString = (params: any) => {
 }
 
 // @ts-ignore
+
 export const CreateRequest = async (config: any) => {
-    const {method, url, params, apiKey, timestamp, Signature} = config
+    let {method, url, params, apiKey, timestamp, Signature} = config
+
+    const inputUrl = new URL(url);
+    // const inputParams = new URLSearchParams(inputUrl.search);
+    for (var key in params) {
+        inputUrl.searchParams.append(key, params[key])
+    }
+    
     if (method === 'GET' || method === 'DELETE') {
-        const data = await getRequestInstance({
+        const data = await fetch(inputUrl, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'ApiKey': apiKey,
                 'Request-Time': timestamp,
                 'Signature': Signature
             },
-        }).request({
-            method,
-            url,
-            params
         })
-        return data.data;
+        
+        const res = await data.json()
+        return res;
     }
     if (method === 'POST') {
-        const data = await getRequestInstance({
+        
+        const data = await fetch(inputUrl, {
+            method: method,
             headers: {
                 'Content-Type': 'application/json',
                 'ApiKey': apiKey,
                 'Request-Time': timestamp,
                 'Signature': Signature
             },
-        }).request({
-            method,
-            url,
-            data: params
         })
-        return data.data;
+        const res = await data.json()
+        return res;
     }
 }
 
-
-export const stringifyKeyValuePair = ([key, value]: [string, Array<string> | string]) => {
-    const valueString = Array.isArray(value) ? `["${value.join('","')}"]` : value
+// export const CreateRequest = async (config: any) => {
+    //     const {method, url, params, apiKey, timestamp, Signature} = config
+    //     if (method === 'GET' || method === 'DELETE') {
+        //         const data = await getRequestInstance({
+            //             headers: {
+                //                 'Content-Type': 'application/json',
+                //                 'ApiKey': apiKey,
+                //                 'Request-Time': timestamp,
+                //                 'Signature': Signature
+                //             },
+                //         }).request({
+                    //             method,
+                    //             url,
+                    //             params
+                    //         })
+                    //         return data.data;
+                    //     }
+                    //     if (method === 'POST') {
+                        //         const data = await getRequestInstance({
+                            //             headers: {
+                                //                 'Content-Type': 'application/json',
+                                //                 'ApiKey': apiKey,
+                                //                 'Request-Time': timestamp,
+                                //                 'Signature': Signature
+                                //             },
+                                //         }).request({
+                                    //             method,
+                                    //             url,
+                                    //             data: params
+                                    //         })
+                                    //         return data.data;
+                                    //     }
+                                    // }
+                                    
+                                    export const stringifyKeyValuePair = ([key, value]: [string, Array<string> | string]) => {
+                                        const valueString = Array.isArray(value) ? `["${value.join('","')}"]` : value
     return `${key}=${encodeURIComponent(valueString)}`
 }
 
@@ -71,16 +110,16 @@ export const getRequestInstance = (config: any) => {
 
 export const createRequest = async (config: any) => {
     const {apiKey, method, url} = config
-    const data = await getRequestInstance({
+    const data = await fetch(url, {
+        method: method,
         headers: {
             'Content-Type': 'application/json',
             'X-MEXC-APIKEY': apiKey,
         }
-    }).request({
-        method,
-        url
     })
-    return data.data;
+
+    const res = await data.json()
+    return res;
 }
 
 export const pubRequest = async (config: any) => {

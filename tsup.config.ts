@@ -1,4 +1,4 @@
-import {defineConfig} from 'tsup'
+import {defineConfig} from '../../../node_modules/tsup'
 
 
 export default defineConfig({

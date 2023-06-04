@@ -1,5 +1,5 @@
 import {buildQueryString, createRequest, CreateRequest, pubRequest, removeEmptyValue} from '../helpers/utils'
-import CryptoJS from "crypto-js"
+import CryptoJS from "crypto-js" 
 
 
 export interface IOptions {
