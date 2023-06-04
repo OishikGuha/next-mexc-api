@@ -1,19 +1,27 @@
-#### Installation: **`npm install node-mexc-api`**
-[![npm install node-mexc-api](https://nodei.co/npm/node-mexc-api.png?mini=true)](https://npmjs.org/package/node-mexc-api)
+### Installation: **`npm install node-mexc-api`**
 
-#### Getting started
+[![NPM](https://nodei.co/npm/next.png)](https://nodei.co/npm/next/)
+
+### Getting started
+
+To be used in nextjs API routes only!
+
+_Example:_
+
 ```typescript
-const Mexc = require('node-mexc-api').default;
+import Mexc from "next-mexc-api";
 require("dotenv").config();
 
-
-const mexc = new Mexc({
+export async function GET(request: Request) {
+  const mexc = new Mexc({
     apiKey: process.env.API_KEY,
-    apiSecret: process.env.SECRET_KEY
-});
+    apiSecret: process.env.SECRET_KEY,
+  });
+}
 ```
 
-#### Spot
+### Spot
+
 ```typescript
     await mexc.spot.symbols();
     await mexc.spot.serverTime();
@@ -185,6 +193,7 @@ const mexc = new Mexc({
 ```
 
 #### Contract
+
 ```typescript
     await mexc.contract.serverTime();
     await mexc.contract.contractDetail();
